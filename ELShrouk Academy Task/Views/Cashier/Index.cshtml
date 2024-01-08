@@ -1,0 +1,65 @@
+﻿@model IEnumerable<BusinessAccessLayer.Models.Cashier>
+
+@{
+    ViewData["Title"] = "Index";
+    int count = 1;
+}
+
+<div class="container text-center">
+    <h3 class="my-4">صفحة الكاشير</h3>
+    <p class="mb-4">
+        <a class="btn btn-primary float-end mb-2" asp-action="Add">إضافة كاشير جديد</a>
+    </p>
+    <table class="table table-bordered table-striped" dir="rtl">
+        <thead class="thead-dark">
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">اسم الكاشير</th>
+                <th scope="col">اسم الفرع</th>
+                <th scope="col">الفاتورة</th>
+                <th scope="col"></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <th scope="row">@(count++)</th>
+                    <td>@Html.DisplayFor(modelItem => item.CashierName)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Branch.BranchName)</td>
+                    <td>
+                        <div class="invoice-header">
+                            @foreach (var invoiceHeader in item.InvoiceHeaders)
+                            {
+                                <div>
+                                    <strong>اسم العميل:</strong> @invoiceHeader.CustomerName
+                                    <div class="invoice-details">
+                                        @foreach (var invoicedetails in invoiceHeader.InvoiceDetails)
+                                        {
+                                            <div>
+                                                <strong>اسم العنصر:</strong> @invoicedetails.ItemName
+                                            </div>
+                                            <div>
+                                                <strong>سعر العنصر:</strong> @invoicedetails.ItemPrice
+                                            </div>
+                                        }
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </td>
+                    <td>
+                        <a class="btn btn-info" asp-action="Update" asp-route-id="@item.ID">تعديل</a>
+                        <a class="btn btn-success" asp-action="GetById" asp-route-id="@item.ID">تفاصيل</a>
+                        <a class="btn btn-danger js-delete" data-id="@item.ID">حذف</a>
+                       
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+@section Scripts{
+    <script src="~/js/confirmdelete.js" asp-append-version="true"></script>
+}
+

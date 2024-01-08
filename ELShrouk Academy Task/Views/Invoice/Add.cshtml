@@ -1,0 +1,83 @@
+﻿@model BusinessAccessLayer.ViewModels.InvoiceHeadersVM
+@{
+    SelectList BranchesList = new SelectList(Model.Branches, "ID", "BranchName");
+    SelectList CashiersList = new SelectList(Model.Cashieres, "ID", "CashierName");
+    SelectList invoiceDetailesList = new SelectList(Model.InvoiceDetails, "ID", "ItemName");
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <h1 class="text-center">إضافة فاتورة جديدة</h1>
+
+            <form asp-action="Add" method="post">
+                <div class="form-group">
+                    <label asp-for="CustomerName">اسم العميل:</label>
+                    <input asp-for="CustomerName" class="form-control" />
+                    <span asp-validation-for="CustomerName" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Invoicedate">تاريخ الفاتورة:</label>
+                    <input asp-for="Invoicedate" class="form-control" />
+                    <span asp-validation-for="Invoicedate" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="BranchID">الفرع:</label>
+                    <select asp-for="BranchID" asp-items="BranchesList" class="form-control">
+                        <option value="">أختر فرع</option>
+                    </select>
+                    <span asp-validation-for="BranchID" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="CashierID">الكاشير:</label>
+                    <select asp-for="CashierID" asp-items="CashiersList" class="form-control">
+                        <option value="">أختر الكاشير</option>
+                    </select>
+                    <span asp-validation-for="CashierID" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label>تفاصيل الفاتورة:</label>
+                   
+                    @foreach(var invoice in Model.InvoiceDetails)
+                    {
+                        <div class="row">
+                            <div class="col-md-6">
+
+                                <input type="hidden" asp-for="@invoice.ID" class="form-control" />
+                                <span asp-validation-for="@invoice.ID" class="text-danger"></span>
+                            </div>
+!                          
+                            <div class="col-md-6">
+                                <label asp-for="@invoice.ItemName">اسم العنصر:</label>
+                                <select asp-for="@invoice.ID" asp-items="invoiceDetailesList" class="form-control">
+                                    <option value=""></option>
+                                </select>
+                                <span asp-validation-for="@invoice.ItemName" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-6">
+                                <label asp-for="@invoice.ItemCount">عدد العناصر:</label>
+                                <input asp-for="@invoice.ItemCount" class="form-control" type="number" placeholder="عدد العناصر" />
+                                <span asp-validation-for="@invoice.ItemCount" class="text-danger"></span>
+                            </div>
+                        </div>
+                     
+                        
+
+                    }
+                    <span asp-validation-for="@Model.InvoiceDetails" class="text-danger"></span>
+                </div>
+
+                <div class="text-center">
+                    <button type="submit" class="btn btn-primary mt-3">إضافة فاتورة</button>
+                </div>
+            </form>
+            <div class="text-center mt-3">
+                <a asp-action="Index" class="btn btn-secondary">العودة للقائمة</a>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts {
+
+    <partial name="_ValidationScriptsPartial" />
+}

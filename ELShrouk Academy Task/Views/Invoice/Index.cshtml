@@ -1,0 +1,62 @@
+﻿@model IEnumerable<BusinessAccessLayer.ViewModels.InvoiceHeadersVM>
+
+@{
+    ViewData["Title"] = "Index";
+    int count = 1;
+}
+
+<div class="container text-center">
+    <h3 class="my-4">صفحة الفواتير</h3>
+    <p class="mb-4">
+        <a class="btn btn-primary float-end mb-2" asp-action="Add">إضافة فاتوره جديدة</a>
+    </p>
+    <table class="table table-bordered table-striped" dir="rtl">
+        <thead class="thead-dark">
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">اسم العميل</th>
+                <th scope="col">اسم الفرع</th>
+                <th scope="col">اسم الكاشير</th>
+                <th scope="col">تاريخ الفاتورة</th>
+                <th scope="col"> اسم العنصر</th>
+                <th scope="col">الإجمالي</th>
+                <th scope="col"></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <th scope="row">@(count++)</th>
+                    <td>@Html.DisplayFor(modelItem => item.CustomerName)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Branch.BranchName)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Cashier.CashierName)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Invoicedate)</td>
+                    <td>
+                        @if (item.InvoiceDetails.Count > 1)
+                        {
+                            @Html.DisplayFor(modelItem => item.InvoiceDetails.FirstOrDefault().ItemName)
+                        }
+                        else if (item.InvoiceDetails.Count == 1)
+                        {
+                            @Html.DisplayFor(modelItem => item.InvoiceDetails.First().ItemName)
+                        }
+                    </td>
+                    <td>@Html.DisplayFor(modelItem => item.TotalPirce)</td>
+                    <td> 
+                        <a class="btn btn-info" asp-action="Update" asp-route-id="@item.ID">تعديل</a>
+                        <a class="btn btn-success" asp-action="GetById" asp-route-id="@item.ID">تفاصيل</a>
+                        <a class="btn btn-danger js-delete" data-id="@item.ID">حذف</a>
+
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+@section Scripts{
+    <script src="~/js/confirmdelete.js" asp-append-version="true"></script>
+}
+
+
+
